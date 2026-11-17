@@ -39,6 +39,22 @@ flowchart LR
 | P002 | 6 | Accessible | View on map |
 | P003 | 3 | B | View on map |
 
+## Example emails
+
+These come from a live test submission. While testing, all three emails were sent to the same inbox.
+
+**Facilities: striping request.** Each row is a lot and drawn area from the form, and **View on map** opens the stall outline on satellite imagery.
+
+![Facilities striping request email](docs/screenshots/Screenshot%202026-11-17%20at%209.17.37AM.png)
+
+**TechOps: update the parking inventory map.** It links to the survey response and the inventory map.
+
+![TechOps map update email](docs/screenshots/Screenshot%202026-11-17%20at%209.17.46AM.png)
+
+**Requester: confirmation.** It tells the requester their request was received.
+
+![Requester confirmation email](docs/screenshots/Screenshot%202026-11-17%20at%209.17.52AM.png)
+
 ## How the map link works
 
 The stall outline travels in the URL fragment as [WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry), so the page is fully static:
