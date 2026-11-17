@@ -1,6 +1,6 @@
 # Parking Stall Striping Map
 
-An automated workflow that turns a parking allocation change request into a striping work order with a precise, clickable map of every stall that needs to be repainted. Built for UC San Diego Transportation Services.
+A formal workflow for tracking parking allocation changes at UC San Diego Transportation Services. Each change request is recorded, TechOps is prompted to update the allocation records, and Facilities Management gets a striping work order with a clickable map of every stall to repaint.
 
 **Live demo:** [open a sample stall](https://dshonuyi.github.io/parking-stall-striping-map/#POLYGON((-117.25379027008225%2032.86401228144671,-117.25372118224539%2032.86400802636215,-117.25373224635756%2032.86390815282436,-117.25378463849104%2032.86390815282436,-117.25379027008225%2032.86401228144671)))
 
@@ -8,11 +8,15 @@ An automated workflow that turns a parking allocation change request into a stri
 
 ## The problem
 
-When a parking space allocation changes (for example, a standard stall becomes an accessible or reserved stall), the Facilities team has to re-stripe it. Requests came in through a form, and Facilities had no reliable way to see exactly which stalls were affected:
+UC San Diego Transportation Services (TS) changes parking space allocations on a quarterly basis, for example turning standard stalls into accessible or reserved stalls. Even so, TS had no formal way to track those changes. Without a set process, there was no consistent record of what changed and when, and other departments whose work depends on a change, especially Facilities Management (FM), which re-stripes the stalls, had no standard way of learning that their services were needed.
 
-- Facilities staff don't have ArcGIS accounts, so they can't open the GIS layer where requesters draw the stalls.
-- A single map pin shows a point, not the outline of the stalls to paint.
-- Free map viewers that accept shapes in a link only offered a street basemap, and crews need satellite imagery to see the existing paint lines.
+## The goal
+
+Build a formal workflow that:
+
+- captures every allocation change request in one place, so TS has a record of what changed, where and when;
+- prompts TechOps to update the parking allocation records in the Parking Inventory Map;
+- notifies FM automatically, with exactly which stalls need re-striping. FM staff don't have ArcGIS accounts, so the stall locations have to open without a login and on satellite imagery, where crews can see the existing paint lines.
 
 ## The solution
 
