@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stall Striping Location</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  html, body { margin: 0; height: 100%; font-family: Arial, sans-serif; }
+  #map { position: absolute; top: 48px; bottom: 0; left: 0; right: 0; }
+  header {
+    height: 48px; display: flex; align-items: center; gap: 12px;
+    padding: 0 16px; background: #182B49; color: #fff; box-sizing: border-box;
+  }
+  header strong { font-size: 16px; }
+  header span { font-size: 13px; opacity: .85; }
+  .msg {
+    position: absolute; top: 64px; left: 50%; transform: translateX(-50%);
+    background: #fff; padding: 10px 16px; border-radius: 6px; z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,.3); font-size: 14px; display: none;
+  }
+</style>
+</head>
+<body>
+<header>
+  <strong>Stall to be re-striped</strong>
+  <span>UCSD Transportation Services</span>
+</header>
+<div id="map"></div>
+<div class="msg" id="msg">No stall outline was found in this link.</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  var map = L.map('map', { maxZoom: 21 });
+
+  var satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { maxNativeZoom: 19, maxZoom: 21, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics' }
+  ).addTo(map);
+
+  var labels = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+    { maxNativeZoom: 19, maxZoom: 21 }
+  ).addTo(map);
+
+  var streets = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { maxNativeZoom: 19, maxZoom: 21, attribution: '&copy; OpenStreetMap contributors' }
+  );
+
+  L.control.layers(
+    { 'Satellite': satellite, 'Street map': streets },
+    { 'Place labels': labels }
+  ).addTo(map);
+
+  // Reads links like: #POLYGON((x y,x y,...)) — one or more polygons separated by ;
+  function parsePolygons(hash) {
+    var text = decodeURIComponent(hash.replace(/^#/, ''));
+    var matches = text.match(/POLYGON\s*\(\((.*?)\)\)/gi) || [];
+    return matches.map(function (poly) {
+      var inner = poly.replace(/POLYGON\s*\(\(/i, '').replace(/\)\)$/, '');
+      return inner.split(',').map(function (pair) {
+        var xy = pair.trim().split(/\s+/).map(Number);
+        return [xy[1], xy[0]]; // Leaflet wants [lat, lng]
+      }).filter(function (p) { return !isNaN(p[0]) && !isNaN(p[1]); });
+    }).filter(function (ring) { return ring.length >= 3; });
+  }
+
+  function draw() {
+    var rings = parsePolygons(window.location.hash);
+    if (!rings.length) {
+      document.getElementById('msg').style.display = 'block';
+      map.setView([32.8801, -117.2340], 15); // UCSD campus
+      return;
+    }
+    var group = L.featureGroup(rings.map(function (ring) {
+      return L.polygon(ring, { color: '#ff2a2a', weight: 3, fillColor: '#FFCD00', fillOpacity: 0.35 });
+    })).addTo(map);
+    map.fitBounds(group.getBounds(), { maxZoom: 20, padding: [60, 60] });
+  }
+
+  draw();
+</script>
+</body>
+</html>
