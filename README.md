@@ -47,6 +47,10 @@ These come from a live test submission. While testing, all three emails were sen
 
 ![Facilities striping request email](docs/screenshots/Screenshot%202026-11-17%20at%209.17.37AM.png)
 
+**The stall map.** Clicking **View on map** in that email opens this page, with the stall to re-stripe outlined in red on satellite imagery.
+
+![Stall map with the stall outlined on satellite imagery](docs/screenshots/Screenshot%202026-11-17%20at%209.20.59AM.png)
+
 **TechOps: update the parking inventory map.** It links to the survey response and the inventory map.
 
 ![TechOps map update email](docs/screenshots/Screenshot%202026-11-17%20at%209.17.46AM.png)
